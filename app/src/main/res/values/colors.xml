@@ -12,5 +12,6 @@
     <color name="ps_icon_muted">#9AA3AB</color>
     <color name="ps_divider">#14000000</color>
     <color name="ps_chip_text">#1D232A</color>
+    <color name="ps_accent_green">#16A34A</color>
 
 </resources>
