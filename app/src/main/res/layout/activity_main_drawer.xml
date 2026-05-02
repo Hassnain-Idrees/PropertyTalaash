@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  Main activity with a left navigation drawer (UI-only).
+  Drawer currently only contains the profile/account block header.
+-->
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".MainActivity">
+
+    <!-- App content -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragment_container"
+            android:name="com.example.myapplication.fragments.HomeFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <!-- Drawer (left) -->
+    <LinearLayout
+        android:id="@+id/nav_view"
+        android:layout_width="320dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/ps_background"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Profile header (reuse same look) -->
+        <include layout="@layout/drawer_header_profile" />
+
+        <!-- Add Property -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/btn_drawer_add_property"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="@color/ps_primary_dark"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="0dp">
+
+            <TextView
+                android:id="@+id/tv_add_property"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="+ Add Property"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Spacer -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <!-- Logout -->
+        <TextView
+            android:id="@+id/tv_logout"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center"
+            android:text="Logout"
+            android:textColor="#E53935"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</androidx.drawerlayout.widget.DrawerLayout>

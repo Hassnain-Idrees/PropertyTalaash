@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  Search result item (UI-only)
+  Designed to match Figma Layer 02: horizontal card with image, featured tag, title, location, price, and like icon.
+-->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="14dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/ps_surface"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/ps_divider"
+    app:strokeWidth="1dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/img"
+            android:layout_width="92dp"
+            android:layout_height="78dp"
+            app:cardBackgroundColor="#E9ECEF"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_property_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:contentDescription="Property Image" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/tag_featured"
+            android:layout_width="wrap_content"
+            android:layout_height="22dp"
+            android:layout_marginStart="12dp"
+            app:cardBackgroundColor="#EEF2F6"
+            app:cardCornerRadius="11dp"
+            app:cardElevation="0dp"
+            app:layout_constraintStart_toEndOf="@id/img"
+            app:layout_constraintTop_toTopOf="@id/img">
+
+            <TextView
+                android:id="@+id/tv_featured"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="Featured"
+                android:textColor="#4A677E"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <ImageView
+            android:id="@+id/iv_like"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:contentDescription="@string/cd_favorite"
+            android:src="@drawable/ic_heart_placeholder"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/img" />
+
+        <!--
+          Red delete button — GONE by default.
+          Made VISIBLE only on the own-profile screen via SearchResultsAdapter.setDeleteListener().
+          Using ImageButton (not MaterialButton) to avoid style inflation issues.
+        -->
+        <ImageButton
+            android:id="@+id/btn_delete_listing"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/bg_delete_btn"
+            android:contentDescription="Delete listing"
+            android:padding="6dp"
+            android:src="@android:drawable/ic_menu_delete"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/ps_text_primary"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/iv_like"
+            app:layout_constraintStart_toEndOf="@id/img"
+            app:layout_constraintTop_toBottomOf="@id/tag_featured"
+            tools:text="Blue Star Villa" />
+
+        <ImageView
+            android:id="@+id/iv_pin"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="6dp"
+            android:contentDescription="@string/cd_location_pin"
+            android:src="@drawable/ic_pin_placeholder"
+            app:layout_constraintStart_toEndOf="@id/img"
+            app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+        <TextView
+            android:id="@+id/tv_location"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="6dp"
+            android:textColor="@color/ps_text_secondary"
+            android:textSize="11sp"
+            app:layout_constraintEnd_toStartOf="@id/iv_like"
+            app:layout_constraintStart_toEndOf="@id/iv_pin"
+            app:layout_constraintTop_toBottomOf="@id/tv_title"
+            tools:text="4272 Kent Dairy, AL" />
+
+        <TextView
+            android:id="@+id/tv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/ps_primary_dark"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/img"
+            app:layout_constraintTop_toBottomOf="@id/tv_location"
+            tools:text="$165,000" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

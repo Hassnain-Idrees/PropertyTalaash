@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/search_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ps_background"
+    android:orientation="vertical">
+
+    <!-- Header: back / centered title / notification -->
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingTop="18dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="8dp">
+
+        <!-- Left slot -->
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="start|center_vertical"
+                android:contentDescription="@string/cd_back"
+                android:src="@drawable/ic_back_placeholder" />
+
+        </FrameLayout>
+
+        <!-- Center slot -->
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/search_results_title"
+                android:textColor="@color/ps_text_primary"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+        </FrameLayout>
+
+        <!-- Right slot (empty spacer) -->
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <View
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="end|center_vertical" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <!-- Scrollable content -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Search field -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/search_container"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="20dp"
+                app:cardBackgroundColor="@color/ps_surface"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/ps_divider"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:baselineAligned="false"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp">
+
+                    <ImageView
+                        android:id="@+id/iv_search"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:contentDescription="@string/search_hint"
+                        android:src="@drawable/ic_search_placeholder" />
+
+                    <EditText
+                        android:id="@+id/et_search"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:hint="Search properties..."
+                        android:inputType="text"
+                        android:textColor="@color/ps_text_primary"
+                        android:textColorHint="#B0B6BD"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Filter row -->
+            <HorizontalScrollView
+                android:id="@+id/filters_scroll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:fillViewport="true"
+                android:overScrollMode="never"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/filters_row"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp">
+
+                    <!-- Filter button (filled) -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/btn_filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        app:cardBackgroundColor="@color/ps_primary_dark"
+                        app:cardCornerRadius="14dp"
+                        app:cardElevation="0dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:baselineAligned="false"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingStart="14dp"
+                            android:paddingEnd="14dp">
+
+                            <ImageView
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:contentDescription="@string/cd_filter"
+                                android:src="@drawable/ic_filter_placeholder" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="@string/filter"
+                                android:textColor="@color/white"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- Dropdown chips (outlined) -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/chip_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="10dp"
+                        app:cardBackgroundColor="@color/ps_surface"
+                        app:cardCornerRadius="14dp"
+                        app:cardElevation="0dp"
+                        app:strokeColor="@color/ps_divider"
+                        app:strokeWidth="1dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:baselineAligned="false"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingStart="14dp"
+                            android:paddingEnd="14dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/price"
+                                android:textColor="@color/ps_icon_muted"
+                                android:textSize="13sp" />
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_marginStart="6dp"
+                                android:contentDescription="@string/cd_dropdown"
+                                android:src="@drawable/ic_chevron_down_placeholder" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/chip_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="10dp"
+                        app:cardBackgroundColor="@color/ps_surface"
+                        app:cardCornerRadius="14dp"
+                        app:cardElevation="0dp"
+                        app:strokeColor="@color/ps_divider"
+                        app:strokeWidth="1dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:baselineAligned="false"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingStart="14dp"
+                            android:paddingEnd="14dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/type"
+                                android:textColor="@color/ps_icon_muted"
+                                android:textSize="13sp" />
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_marginStart="6dp"
+                                android:contentDescription="@string/cd_dropdown"
+                                android:src="@drawable/ic_chevron_down_placeholder" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/chip_room"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="10dp"
+                        app:cardBackgroundColor="@color/ps_surface"
+                        app:cardCornerRadius="14dp"
+                        app:cardElevation="0dp"
+                        app:strokeColor="@color/ps_divider"
+                        app:strokeWidth="1dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:baselineAligned="false"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingStart="14dp"
+                            android:paddingEnd="14dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/room"
+                                android:textColor="@color/ps_icon_muted"
+                                android:textSize="13sp" />
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_marginStart="6dp"
+                                android:contentDescription="@string/cd_dropdown"
+                                android:src="@drawable/ic_chevron_down_placeholder" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- City chip -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/chip_city"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="10dp"
+                        app:cardBackgroundColor="@color/ps_surface"
+                        app:cardCornerRadius="14dp"
+                        app:cardElevation="0dp"
+                        app:strokeColor="@color/ps_divider"
+                        app:strokeWidth="1dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:baselineAligned="false"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingStart="14dp"
+                            android:paddingEnd="14dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="City"
+                                android:textColor="@color/ps_icon_muted"
+                                android:textSize="13sp" />
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_marginStart="6dp"
+                                android:contentDescription="@string/cd_dropdown"
+                                android:src="@drawable/ic_chevron_down_placeholder" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
+
+            <!-- Result count -->
+            <TextView
+                android:id="@+id/tv_result_count"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="20dp"
+                android:text="@string/ads_found_count"
+                android:textColor="@color/ps_text_secondary"
+                android:textSize="13sp" />
+
+            <!-- Results list (inside scroll) -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_results"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="20dp"
+                tools:listitem="@layout/item_search_result" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

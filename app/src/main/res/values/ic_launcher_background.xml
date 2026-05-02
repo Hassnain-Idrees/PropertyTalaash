@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Solid background for adaptive icon to prevent black background in launcher previews -->
+    <color name="ic_launcher_bg">@color/ps_primary_dark</color>
+</resources>

@@ -1,0 +1,127 @@
+<resources>
+    <string name="app_name">PropertyTalaash</string>
+
+    <!-- Home -->
+    <string name="home_title">Home</string>
+    <string name="current_location">CURRENT LOCATION</string>
+    <string name="location_value">Detecting…</string>
+    <string name="search_hint">Search…</string>
+    <string name="promo_title">Your dream homes\nare now on sale</string>
+    <string name="promo_subtitle">Starting from</string>
+    <string name="promo_price">PKR 50 Lac</string>
+
+    <string name="cat_all">All Properties</string>
+    <string name="cat_villa">Villa</string>
+    <string name="cat_apartment">Apartment</string>
+    <string name="cat_house">House</string>
+
+    <!-- Bottom nav (UI only) -->
+    <string name="nav_home">Home</string>
+    <string name="nav_favorites">Favorites</string>
+    <string name="nav_chat">Chat</string>
+    <string name="nav_profile">Profile</string>
+
+    <!-- Accessibility strings -->
+    <string name="cd_favorite">Favorite</string>
+    <string name="cd_location_pin">Location</string>
+
+    <!-- Drawer (UI only) -->
+    <string name="drawer_guest_name">Guest User</string>
+    <string name="drawer_guest_contact">guest@example.com</string>
+
+    <!-- Search Results -->
+    <string name="search_results_title">Search Results</string>
+    <string name="search_query_villa">Villa</string>
+    <string name="ads_found_count">Search Results</string>
+    <string name="filter">Filter</string>
+    <string name="price">Price</string>
+    <string name="type">Type</string>
+    <string name="room">Room</string>
+    <string name="featured">Featured</string>
+
+    <!-- Content descriptions -->
+    <string name="cd_back">Back</string>
+    <string name="cd_notifications">Notifications</string>
+    <string name="cd_filter">Filter</string>
+    <string name="cd_dropdown">Dropdown</string>
+
+    <!-- Filter & Sort -->
+    <string name="filter_sort_title">Filter &amp; Sort</string>
+    <string name="cd_close">Close</string>
+    <string name="category">Category</string>
+    <string name="price_range">PKR 50 Lac - PKR 3.5 Cr</string>
+    <string name="sort">Sort</string>
+    <string name="newest">Newest</string>
+    <string name="recommended">Recommended</string>
+    <string name="highest_price">Highest Price</string>
+    <string name="lowest_price">Lowest Price</string>
+    <string name="living_area">Living Area</string>
+    <string name="living_area_range">3 - 50 Marla</string>
+    <string name="facilities">Facilities</string>
+    <string name="bedroom">Bedroom</string>
+    <string name="bathroom">Bathroom</string>
+    <string name="reset">Reset</string>
+    <string name="apply">Apply</string>
+
+    <!-- Property Preview (Screen 04) -->
+    <string name="pp_title">Loading…</string>
+    <string name="pp_address">Loading…</string>
+    <string name="pp_price">…</string>
+    <string name="owner">Owner</string>
+    <string name="pp_owner_name">Loading…</string>
+    <string name="member_since_2019">Contact info loading…</string>
+    <string name="view_profile">View Profile</string>
+    <string name="description">Description</string>
+    <string name="pp_description">Loading description…</string>
+    <string name="chat">Chat</string>
+    <string name="call">Call</string>
+
+    <!-- Property Details (Screen 05) -->
+    <string name="pd_title">Loading…</string>
+    <string name="pd_address">Loading…</string>
+    <string name="cd_more">More</string>
+
+    <string name="details">Details</string>
+    <string name="building">Building</string>
+
+    <string name="pd_owner_name">Loading…</string>
+    <string name="pd_owner_since">Loading contact…</string>
+
+    <string name="pd_type">Type</string>
+    <string name="pd_type_value">–</string>
+    <string name="pd_year_built">Year built</string>
+    <string name="pd_year_value">–</string>
+    <string name="pd_living_area">Living area</string>
+    <string name="pd_living_area_value">–</string>
+
+    <string name="features">Features</string>
+    <string name="cd_feature">Feature</string>
+
+    <!-- Property Details (Screen 05) - Feature labels -->
+    <string name="pd_feat_bedrooms">4 bedrooms</string>
+    <string name="pd_feat_living_rooms">2 living rooms</string>
+    <string name="pd_feat_bathrooms">5 bathrooms</string>
+    <string name="pd_feat_kitchen">Kitchen</string>
+    <string name="pd_feat_garage">Garage</string>
+    <string name="pd_feat_garden">Garden</string>
+
+
+    <!-- Branding -->
+    <string name="property_talaash">PropertyTalaash</string>
+    <string name="cd_app_logo">PropertyTalaash Logo</string>
+
+    <!-- Auth (UI only) -->
+    <string name="login">Login</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="login_subtitle">Find your next property in minutes</string>
+    <string name="signup_subtitle">Create an account to save and chat</string>
+
+    <string name="hint_name">Full Name</string>
+    <string name="hint_email">Email / Username</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_confirm_password">Confirm Password</string>
+
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="have_account">Already have an account?</string>
+
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<scale xmlns:android="http://schemas.android.com/apk/res/android"
+    android:scaleWidth="75%"
+    android:scaleHeight="75%"
+    android:scaleGravity="center">
+    <bitmap
+        android:src="@drawable/app_logo"
+        android:gravity="center" />
+</scale>
+

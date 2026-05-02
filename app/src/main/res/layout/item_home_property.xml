@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="14dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/ps_surface"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/ps_divider"
+    app:strokeWidth="1dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+
+        <!-- Image placeholder -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/v_image"
+            android:layout_width="0dp"
+            android:layout_height="118dp"
+            app:cardBackgroundColor="#E9ECEF"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_property_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:contentDescription="Property Image" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Like button -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/like_bg"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            app:cardBackgroundColor="#F2F3F5"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="@id/v_image"
+            app:layout_constraintTop_toTopOf="@id/v_image" />
+
+        <ImageView
+            android:id="@+id/iv_like"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:contentDescription="@string/cd_favorite"
+            android:src="@drawable/ic_heart_placeholder"
+            app:layout_constraintBottom_toBottomOf="@id/like_bg"
+            app:layout_constraintEnd_toEndOf="@id/like_bg"
+            app:layout_constraintStart_toStartOf="@id/like_bg"
+            app:layout_constraintTop_toTopOf="@id/like_bg" />
+
+        <TextView
+            android:id="@+id/tv_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textAllCaps="true"
+            android:textColor="@color/ps_text_secondary"
+            android:textSize="11sp"
+            android:letterSpacing="0.12"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/v_image"
+            tools:text="APARTMENT" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/ps_text_primary"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_type"
+            tools:text="Exclusive House" />
+
+        <ImageView
+            android:id="@+id/iv_pin"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginTop="6dp"
+            android:contentDescription="@string/cd_location_pin"
+            android:src="@drawable/ic_pin_placeholder"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+        <TextView
+            android:id="@+id/tv_location"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="6dp"
+            android:textColor="@color/ps_text_secondary"
+            android:textSize="11sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_pin"
+            app:layout_constraintTop_toBottomOf="@id/tv_title"
+            tools:text="134 Alabaster, AL" />
+
+        <TextView
+            android:id="@+id/tv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/ps_primary_dark"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_location"
+            tools:text="$120,000" />
+
+        <!-- Garage / Garden icons row -->
+        <LinearLayout
+            android:id="@+id/features_row"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_price">
+
+            <ImageView
+                android:id="@+id/iv_garage"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_garage_placeholder"
+                android:contentDescription="Garage"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/iv_garden"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="8dp"
+                android:src="@drawable/ic_garden_placeholder"
+                android:contentDescription="Garden"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

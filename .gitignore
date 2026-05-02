@@ -1,0 +1,38 @@
+*.iml
+
+# Gradle
+.gradle/
+build/
+**/build/
+
+# Local config
+/local.properties
+local.properties
+
+# Android Studio / IntelliJ
+.idea/
+*.ipr
+*.iws
+/out/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Native build
+.externalNativeBuild/
+.cxx/
+
+# Logs
+*.log
+
+# APK/AAB
+*.apk
+*.aab
+
+# Keystores (never commit)
+*.jks
+*.keystore
+
+# Firebase (only if you decide to keep it local)
+# google-services.json

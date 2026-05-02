@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Property Search palette (UI only) -->
+    <color name="ps_primary_dark">#0F2E4E</color>
+    <color name="ps_background">#F6F7F9</color>
+    <color name="ps_surface">#FFFFFFFF</color>
+    <color name="ps_text_primary">#1D232A</color>
+    <color name="ps_text_secondary">#7D8790</color>
+    <color name="ps_icon_muted">#9AA3AB</color>
+    <color name="ps_divider">#14000000</color>
+    <color name="ps_chip_text">#1D232A</color>
+
+</resources>
