@@ -51,6 +51,18 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".AboutUsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ContactUsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".TermsActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

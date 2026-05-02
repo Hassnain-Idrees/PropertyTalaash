@@ -2,11 +2,17 @@ package com.example.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 
+import com.example.myapplication.fragments.FavoritesFragment;
+import com.example.myapplication.fragments.HomeFragment;
+import com.example.myapplication.fragments.SearchResultsFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -28,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
 
         loadUserName();
+        setupDrawerActions();
 
         findViewById(R.id.btn_drawer_add_property).setOnClickListener(v -> {
             drawerLayout.close();
@@ -65,5 +72,72 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onCancelled(DatabaseError error) { }
                 });
+    }
+
+    private void setupDrawerActions() {
+        View itemHome = findViewById(R.id.item_home);
+        View itemSearch = findViewById(R.id.item_search);
+        View itemFavorites = findViewById(R.id.item_favorites);
+        View itemSaved = findViewById(R.id.item_saved_searches);
+        View itemAbout = findViewById(R.id.item_about);
+        View itemContact = findViewById(R.id.item_contact);
+        View itemTerms = findViewById(R.id.item_terms);
+
+        if (itemHome != null) {
+            itemHome.setOnClickListener(v -> {
+                drawerLayout.close();
+                openFragment(new HomeFragment());
+            });
+        }
+
+        if (itemSearch != null) {
+            itemSearch.setOnClickListener(v -> {
+                drawerLayout.close();
+                openFragment(new SearchResultsFragment());
+            });
+        }
+
+        if (itemFavorites != null) {
+            itemFavorites.setOnClickListener(v -> {
+                drawerLayout.close();
+                openFragment(new FavoritesFragment());
+            });
+        }
+
+        if (itemSaved != null) {
+            itemSaved.setOnClickListener(v -> {
+                drawerLayout.close();
+                openFragment(new SearchResultsFragment());
+                Toast.makeText(this, "Saved searches will appear here.", Toast.LENGTH_SHORT).show();
+            });
+        }
+
+        if (itemAbout != null) {
+            itemAbout.setOnClickListener(v -> {
+                drawerLayout.close();
+                startActivity(new Intent(this, AboutUsActivity.class));
+            });
+        }
+
+        if (itemContact != null) {
+            itemContact.setOnClickListener(v -> {
+                drawerLayout.close();
+                startActivity(new Intent(this, ContactUsActivity.class));
+            });
+        }
+
+        if (itemTerms != null) {
+            itemTerms.setOnClickListener(v -> {
+                drawerLayout.close();
+                startActivity(new Intent(this, TermsActivity.class));
+            });
+        }
+    }
+
+    private void openFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 }

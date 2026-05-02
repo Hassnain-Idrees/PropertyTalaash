@@ -69,8 +69,16 @@ public class SignUpActivity extends AppCompatActivity {
             etPassword.setError("Password is required");
             return;
         }
-        if (password.length() < 6) {
-            etPassword.setError("Password must be at least 6 characters");
+        if (password.length() < 8) {
+            etPassword.setError("Password must be at least 8 characters");
+            return;
+        }
+        if (!password.matches(".*\\d.*")) {
+            etPassword.setError("Password must contain at least 1 number");
+            return;
+        }
+        if (confirmPassword.isEmpty()) {
+            etConfirmPassword.setError("Confirm password is required");
             return;
         }
         if (!password.equals(confirmPassword)) {
