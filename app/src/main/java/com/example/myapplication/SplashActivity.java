@@ -11,6 +11,7 @@ import android.view.animation.AnimationUtils;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.data.DemoDataSeeder;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class SplashActivity extends AppCompatActivity {
@@ -34,6 +35,8 @@ public class SplashActivity extends AppCompatActivity {
 
         Animation footerAnim = AnimationUtils.loadAnimation(this, R.anim.splash_footer);
         footer.startAnimation(footerAnim);
+
+        DemoDataSeeder.seedIfNeeded(this);
 
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             if (FirebaseAuth.getInstance().getCurrentUser() != null) {

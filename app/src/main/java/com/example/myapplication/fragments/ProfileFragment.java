@@ -193,7 +193,7 @@ public class ProfileFragment extends Fragment {
                         String profilePic = snapshot.child("profilePic").getValue(String.class);
                         if (name  != null) tvName.setText(name);
                         if (email != null) tvEmail.setText(email);
-                        if (profilePic != null) loadProfilePic(profilePic);
+                        loadProfilePic(profilePic);
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) { }
@@ -201,9 +201,28 @@ public class ProfileFragment extends Fragment {
     }
 
     private void loadProfilePic(String path) {
-        if (path == null || path.isEmpty() || getContext() == null) return;
+        if (getContext() == null) return;
+        if (path == null || path.isEmpty()) {
+            Glide.with(requireContext())
+                    .load(R.drawable.default_profile)
+                    .circleCrop()
+                    .into(ivProfilePic);
+            return;
+        }
         File f = new File(path);
-        if (f.exists()) Glide.with(requireContext()).load(f).circleCrop().into(ivProfilePic);
+        if (f.exists()) {
+            Glide.with(requireContext())
+                    .load(f)
+                    .circleCrop()
+                    .error(R.drawable.default_profile)
+                    .into(ivProfilePic);
+        } else {
+            Glide.with(requireContext())
+                    .load(path)
+                    .circleCrop()
+                    .error(R.drawable.default_profile)
+                    .into(ivProfilePic);
+        }
     }
 
     private String saveProfilePicLocally(Uri uri) {

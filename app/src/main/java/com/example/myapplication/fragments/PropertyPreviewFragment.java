@@ -199,19 +199,38 @@ public class PropertyPreviewFragment extends Fragment {
                                     .child("profilePic").addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot snap) {
-                                            if (snap.exists() && getContext() != null) {
-                                                String picPath = snap.getValue(String.class);
-                                                if (picPath != null) {
-                                                    java.io.File pf = new java.io.File(picPath);
-                                                    if (pf.exists()) {
-                                                        Glide.with(requireContext()).load(pf).circleCrop().into(ivOwnerPic);
-                                                    }
+                                            if (getContext() == null) return;
+                                            String picPath = snap.getValue(String.class);
+                                            if (picPath != null && !picPath.isEmpty()) {
+                                                java.io.File pf = new java.io.File(picPath);
+                                                if (pf.exists()) {
+                                                    Glide.with(requireContext())
+                                                            .load(pf)
+                                                            .circleCrop()
+                                                            .error(R.drawable.default_profile)
+                                                            .into(ivOwnerPic);
+                                                } else {
+                                                    Glide.with(requireContext())
+                                                            .load(picPath)
+                                                            .circleCrop()
+                                                            .error(R.drawable.default_profile)
+                                                            .into(ivOwnerPic);
                                                 }
+                                            } else {
+                                                Glide.with(requireContext())
+                                                        .load(R.drawable.default_profile)
+                                                        .circleCrop()
+                                                        .into(ivOwnerPic);
                                             }
                                         }
                                         @Override
                                         public void onCancelled(@NonNull DatabaseError e) { }
                                     });
+                        } else {
+                            Glide.with(requireContext())
+                                    .load(R.drawable.default_profile)
+                                    .circleCrop()
+                                    .into(ivOwnerPic);
                         }
 
                         tvDetailType.setText(p.getType() != null ? p.getType() : "N/A");
@@ -260,7 +279,31 @@ public class PropertyPreviewFragment extends Fragment {
 
     private void setupImagePager() {
         if (allImagePaths.isEmpty()) {
-            tvPageIndicator.setText("No images");
+            vpImages.setAdapter(new RecyclerView.Adapter<ImageVH>() {
+                @NonNull
+                @Override
+                public ImageVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                    ImageView iv = new ImageView(requireContext());
+                    iv.setLayoutParams(new ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    return new ImageVH(iv);
+                }
+
+                @Override
+                public void onBindViewHolder(@NonNull ImageVH holder, int position) {
+                    Glide.with(requireContext())
+                            .load(R.drawable.default_house)
+                            .centerCrop()
+                            .into((ImageView) holder.itemView);
+                    holder.itemView.setOnClickListener(v -> showZoomDialog(R.drawable.default_house));
+                }
+
+                @Override
+                public int getItemCount() { return 1; }
+            });
+
+            tvPageIndicator.setText("1 / 1");
             return;
         }
 
@@ -278,9 +321,26 @@ public class PropertyPreviewFragment extends Fragment {
             @Override
             public void onBindViewHolder(@NonNull ImageVH holder, int position) {
                 String path = allImagePaths.get(position);
-                File f = new File(path);
-                if (f.exists()) {
-                    Glide.with(requireContext()).load(f).centerCrop().into((ImageView) holder.itemView);
+                if (path == null || path.isEmpty()) {
+                    Glide.with(requireContext())
+                            .load(R.drawable.default_house)
+                            .centerCrop()
+                            .into((ImageView) holder.itemView);
+                } else {
+                    File f = new File(path);
+                    if (f.exists()) {
+                        Glide.with(requireContext())
+                                .load(f)
+                                .centerCrop()
+                                .error(R.drawable.default_house)
+                                .into((ImageView) holder.itemView);
+                    } else {
+                        Glide.with(requireContext())
+                                .load(path)
+                                .centerCrop()
+                                .error(R.drawable.default_house)
+                                .into((ImageView) holder.itemView);
+                    }
                 }
                 holder.itemView.setOnClickListener(v -> showZoomDialog(path));
             }
@@ -305,12 +365,32 @@ public class PropertyPreviewFragment extends Fragment {
 
     private void showZoomDialog(String imagePath) {
         if (getContext() == null) return;
+        if (imagePath == null || imagePath.isEmpty()) {
+            showZoomDialog(R.drawable.default_house);
+            return;
+        }
         Dialog dialog = new Dialog(requireContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         ImageView iv = new ImageView(requireContext());
         iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
         iv.setBackgroundColor(0xFF000000);
         File f = new File(imagePath);
-        if (f.exists()) Glide.with(requireContext()).load(f).into(iv);
+        if (f.exists()) {
+            Glide.with(requireContext()).load(f).into(iv);
+        } else {
+            Glide.with(requireContext()).load(imagePath).error(R.drawable.default_house).into(iv);
+        }
+        iv.setOnClickListener(v -> dialog.dismiss());
+        dialog.setContentView(iv);
+        dialog.show();
+    }
+
+    private void showZoomDialog(int resId) {
+        if (getContext() == null) return;
+        Dialog dialog = new Dialog(requireContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        ImageView iv = new ImageView(requireContext());
+        iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        iv.setBackgroundColor(0xFF000000);
+        Glide.with(requireContext()).load(resId).into(iv);
         iv.setOnClickListener(v -> dialog.dismiss());
         dialog.setContentView(iv);
         dialog.show();

@@ -52,14 +52,25 @@ public class HomePropertyAdapter extends RecyclerView.Adapter<HomePropertyAdapte
         if (imageUrl != null && !imageUrl.isEmpty()) {
             File imageFile = new File(imageUrl);
             if (imageFile.exists()) {
-
-                Glide.with(h.itemView.getContext()).load(imageFile).centerCrop().into(h.ivPropertyImage);
+                Glide.with(h.itemView.getContext())
+                        .load(imageFile)
+                        .centerCrop()
+                        .placeholder(R.drawable.default_house)
+                        .error(R.drawable.default_house)
+                        .into(h.ivPropertyImage);
             } else {
-
-                Glide.with(h.itemView.getContext()).load(imageUrl).centerCrop().into(h.ivPropertyImage);
+                Glide.with(h.itemView.getContext())
+                        .load(imageUrl)
+                        .centerCrop()
+                        .placeholder(R.drawable.default_house)
+                        .error(R.drawable.default_house)
+                        .into(h.ivPropertyImage);
             }
         } else {
-            h.ivPropertyImage.setImageResource(0);
+            Glide.with(h.itemView.getContext())
+                    .load(R.drawable.default_house)
+                    .centerCrop()
+                    .into(h.ivPropertyImage);
         }
 
         if (item.isLiked()) {

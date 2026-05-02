@@ -72,6 +72,9 @@ public class HomeFragment extends Fragment {
     private String currentCity = "";
     private String selectedType = "All";
     private boolean showNearbyOnly = false;
+    private TextView btnBuy;
+    private TextView btnRent;
+    private boolean isBuySelected = true;
 
     @Nullable
     @Override
@@ -114,6 +117,9 @@ public class HomeFragment extends Fragment {
 
         chipShowAll = view.findViewById(R.id.chip_show_all);
         chipNearby = view.findViewById(R.id.chip_nearby);
+
+        btnBuy = view.findViewById(R.id.btn_buy);
+        btnRent = view.findViewById(R.id.btn_rent);
 
         propertiesRef = FirebaseDatabase.getInstance().getReference("Properties");
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
@@ -196,8 +202,38 @@ public class HomeFragment extends Fragment {
 
         view.findViewById(R.id.card_location).setOnClickListener(v -> getCurrentLocation());
 
+        if (btnBuy != null) {
+            btnBuy.setOnClickListener(v -> updateBuyRentToggle(true));
+        }
+        if (btnRent != null) {
+            btnRent.setOnClickListener(v -> updateBuyRentToggle(false));
+        }
+
+        updateBuyRentToggle(true);
         setSelectedChip(0);
         updateNearbyChips();
+    }
+
+    private void updateBuyRentToggle(boolean selectBuy) {
+        isBuySelected = selectBuy;
+        if (btnBuy != null) {
+            if (selectBuy) {
+                btnBuy.setBackgroundResource(R.drawable.bg_toggle_selected);
+                btnBuy.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white));
+            } else {
+                btnBuy.setBackgroundColor(android.graphics.Color.TRANSPARENT);
+                btnBuy.setTextColor(ContextCompat.getColor(requireContext(), R.color.ps_text_primary));
+            }
+        }
+        if (btnRent != null) {
+            if (!selectBuy) {
+                btnRent.setBackgroundResource(R.drawable.bg_toggle_selected);
+                btnRent.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white));
+            } else {
+                btnRent.setBackgroundColor(android.graphics.Color.TRANSPARENT);
+                btnRent.setTextColor(ContextCompat.getColor(requireContext(), R.color.ps_text_primary));
+            }
+        }
     }
 
     private void loadProfilePic() {
@@ -217,13 +253,28 @@ public class HomeFragment extends Fragment {
                 if (!isAdded() || getContext() == null || ivAvatar == null) return;
                 if (snapshot.exists()) {
                     String picPath = snapshot.getValue(String.class);
-                    if (picPath != null) {
+                    if (picPath != null && !picPath.isEmpty()) {
                         File f = new File(picPath);
                         if (f.exists()) {
-                            Glide.with(requireContext()).load(f).circleCrop().into(ivAvatar);
+                            Glide.with(requireContext())
+                                    .load(f)
+                                    .circleCrop()
+                                    .error(R.drawable.default_profile)
+                                    .into(ivAvatar);
+                        } else {
+                            Glide.with(requireContext())
+                                    .load(picPath)
+                                    .circleCrop()
+                                    .error(R.drawable.default_profile)
+                                    .into(ivAvatar);
                         }
+                        return;
                     }
                 }
+                Glide.with(requireContext())
+                        .load(R.drawable.default_profile)
+                        .circleCrop()
+                        .into(ivAvatar);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) { }
