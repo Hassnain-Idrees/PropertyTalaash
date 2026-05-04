@@ -4,6 +4,11 @@ Property Talash is an Android application that helps users search, browse, and l
 
 **"Talash"** means "Search" in Urdu/Hindi - reflecting the core purpose of the application.
 
+## 🆕 Recent Updates
+
+- UI polish for search and property preview screens.
+- Navigation drawer and bottom bar styling improvements.
+
 ## ✨ Features
 
 - 🔐 **User Authentication** - Secure login and signup using Firebase Authentication
@@ -218,4 +223,3 @@ For questions or support, please reach out through:
 ---
 
 **Happy Coding!** 🚀 If you find this project helpful, please consider giving it a ⭐ on GitHub!
-
