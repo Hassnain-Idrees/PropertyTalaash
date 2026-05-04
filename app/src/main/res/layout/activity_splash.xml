@@ -1,86 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!-- PropertyTalash Splash Screen
-     Premium real estate guide branding with attractive hero section
--->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/splash_bg_accent">
 
-    <!-- Center content -->
-    <LinearLayout
-        android:id="@+id/splash_center"
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/iv_logo"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/app_logo"
+        app:layout_constraintBottom_toTopOf="@+id/tv_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp">
+        android:layout_marginTop="24dp"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/property_talaash"
+        android:textColor="@color/white"
+        android:textSize="36sp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_tagline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_logo" />
 
-        <!-- App Logo -->
-        <ImageView
-            android:id="@+id/iv_logo"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:contentDescription="@string/app_name"
-            android:scaleType="fitCenter"
-            android:src="@drawable/app_logo" />
-
-        <!-- Title -->
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/property_talaash"
-            android:textColor="@color/ps_primary_dark"
-            android:textSize="32sp"
-            android:textStyle="bold" />
-
-        <!-- Tagline -->
-        <TextView
-            android:id="@+id/tv_tagline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:gravity="center"
-            android:text="@string/login_subtitle"
-            android:textColor="@color/ps_text_secondary"
-            android:textSize="14sp"
-            android:letterSpacing="0.05" />
-
-        <!-- Tagline Secondary -->
-        <TextView
-            android:id="@+id/tv_tagline_secondary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:gravity="center"
-            android:text="Pakistan&apos;s Premier Real Estate Guide"
-            android:textColor="@color/ps_text_secondary"
-            android:textSize="12sp"
-            android:textStyle="italic" />
-
-    </LinearLayout>
-
-    <!-- Bottom loading pill (subtle) -->
-    <LinearLayout
-        android:id="@+id/splash_footer"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tv_tagline"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingBottom="28dp">
+        android:layout_marginTop="8dp"
+        android:alpha="0.8"
+        android:letterSpacing="0.1"
+        android:text="FIND YOUR DREAM SPACE"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
-        <View
-            android:id="@+id/v_loading_pill"
-            android:layout_width="110dp"
-            android:layout_height="6dp"
-            android:background="@drawable/splash_progress_pill" />
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/splash_progress"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="48dp"
+        android:indeterminate="true"
+        app:indicatorColor="@color/ps_accent_green"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:trackColor="#33FFFFFF"
+        app:trackCornerRadius="4dp"
+        app:trackThickness="4dp" />
 
-    </LinearLayout>
-
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

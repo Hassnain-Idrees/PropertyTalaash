@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +22,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
 import com.example.myapplication.model.Property;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -35,21 +37,26 @@ import java.util.Set;
 
 public class PropertyPreviewFragment extends Fragment {
 
-    private TextView tvTitle, tvAddress, tvPrice, tvOwnerName, tvOwnerMeta, tvDescription, tvReadMore;
-    private TextView tvDetailType, tvDetailYear, tvDetailArea, tvDetailBeds, tvDetailBaths;
-    private TextView tvPageIndicator;
-    private ImageView ivFav, ivOwnerPic;
+    private TextView tvTitle, tvAddress, tvPrice, tvOwnerName, tvOwnerMeta;
+    private TextView tvDetailType, tvDetailYear, tvDetailArea;
+    private TextView tvFeatureBedrooms, tvFeatureBathrooms, tvFeatureLiving, tvFeatureKitchen;
+    private ImageView ivFav, ivOwnerPic, ivCompactImage;
     private ImageView ivFeatGarage, ivFeatGarden;
     private TextView tvFeatGarage, tvFeatGarden;
+    private TextView tvCompactTitle, tvCompactAddress;
     private ViewPager2 vpImages;
     private View btnCall, btnChat, btnViewProfile, btnBack, btnFav, btnViewOnMap;
+    private View bottomSheet;
+    private BottomSheetBehavior<View> bottomSheetBehavior;
+    private LinearLayout dotIndicator;
+    private View compactCard;
+    private View collapsedHeader;
 
     private String propertyId;
     private String ownerPhone = "";
     private String ownerId = "";
     private double propertyLat = 0, propertyLng = 0;
     private boolean isLiked = false;
-    private boolean descExpanded = false;
     private final List<String> allImagePaths = new ArrayList<>();
 
     @Nullable
@@ -69,19 +76,22 @@ public class PropertyPreviewFragment extends Fragment {
         btnFav = view.findViewById(R.id.btn_fav);
         ivFav = view.findViewById(R.id.iv_fav);
         vpImages = view.findViewById(R.id.vp_images);
-        tvPageIndicator = view.findViewById(R.id.tv_page_indicator);
+        dotIndicator = view.findViewById(R.id.dot_indicator);
         tvTitle = view.findViewById(R.id.tv_title);
         tvAddress = view.findViewById(R.id.tv_address);
         tvPrice = view.findViewById(R.id.tv_price);
+        ivCompactImage = view.findViewById(R.id.iv_compact_image);
+        tvCompactTitle = view.findViewById(R.id.tv_compact_title);
+        tvCompactAddress = view.findViewById(R.id.tv_compact_address);
         tvOwnerName = view.findViewById(R.id.tv_owner_name);
         tvOwnerMeta = view.findViewById(R.id.tv_owner_meta);
-        tvDescription = view.findViewById(R.id.tv_description);
-        tvReadMore = view.findViewById(R.id.tv_read_more);
         tvDetailType = view.findViewById(R.id.tv_detail_type);
         tvDetailYear = view.findViewById(R.id.tv_detail_year);
         tvDetailArea = view.findViewById(R.id.tv_detail_area);
-        tvDetailBeds = view.findViewById(R.id.tv_detail_beds);
-        tvDetailBaths = view.findViewById(R.id.tv_detail_baths);
+        tvFeatureBedrooms = view.findViewById(R.id.tv_feature_bedrooms);
+        tvFeatureBathrooms = view.findViewById(R.id.tv_feature_bathrooms);
+        tvFeatureLiving = view.findViewById(R.id.tv_feature_living);
+        tvFeatureKitchen = view.findViewById(R.id.tv_feature_kitchen);
         ivFeatGarage = view.findViewById(R.id.iv_feat_garage);
         tvFeatGarage = view.findViewById(R.id.tv_feat_garage);
         ivFeatGarden = view.findViewById(R.id.iv_feat_garden);
@@ -91,6 +101,27 @@ public class PropertyPreviewFragment extends Fragment {
         btnViewProfile = view.findViewById(R.id.btn_view_profile);
         ivOwnerPic = view.findViewById(R.id.iv_owner_pic);
         btnViewOnMap = view.findViewById(R.id.btn_view_on_map);
+        bottomSheet = view.findViewById(R.id.bottom_sheet);
+        compactCard = view.findViewById(R.id.compact_card);
+        collapsedHeader = view.findViewById(R.id.collapsed_header);
+        if (bottomSheet != null) {
+            bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+            bottomSheetBehavior.setHideable(false);
+            bottomSheetBehavior.setFitToContents(true);
+            bottomSheetBehavior.setPeekHeight(dpToPx(380));
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            updateSheetHeader(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED);
+            bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+                @Override
+                public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                    updateSheetHeader(newState == BottomSheetBehavior.STATE_EXPANDED);
+                }
+
+                @Override
+                public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                }
+            });
+        }
 
         Bundle args = getArguments();
         if (args != null) propertyId = args.getString("propertyId");
@@ -139,11 +170,6 @@ public class PropertyPreviewFragment extends Fragment {
             }
         });
 
-        tvReadMore.setOnClickListener(v -> {
-            descExpanded = !descExpanded;
-            tvDescription.setMaxLines(descExpanded ? Integer.MAX_VALUE : 3);
-            tvReadMore.setText(descExpanded ? "Show less" : "Read more");
-        });
 
         if (btnViewOnMap != null) {
             btnViewOnMap.setOnClickListener(v -> {
@@ -188,8 +214,11 @@ public class PropertyPreviewFragment extends Fragment {
                         propertyLat = p.getLatitude();
                         propertyLng = p.getLongitude();
 
+                        String compactAddress = p.getCity() + ", " + p.getAddress();
                         tvTitle.setText(p.getTitle());
-                        tvAddress.setText(p.getCity() + ", " + p.getAddress());
+                        tvAddress.setText(compactAddress);
+                        if (tvCompactTitle != null) tvCompactTitle.setText(p.getTitle());
+                        if (tvCompactAddress != null) tvCompactAddress.setText(compactAddress);
                         tvPrice.setText("PKR " + String.format(Locale.getDefault(), "%,.0f", p.getPrice()));
                         tvOwnerName.setText(p.getOwnerName());
                         tvOwnerMeta.setText("Contact: " + (ownerPhone != null ? ownerPhone : "N/A"));
@@ -237,8 +266,18 @@ public class PropertyPreviewFragment extends Fragment {
                         tvDetailYear.setText(p.getYearBuilt() > 0 ? String.valueOf(p.getYearBuilt()) : "N/A");
                         tvDetailArea.setText(String.format(Locale.getDefault(), "%.0f %s",
                                 p.getArea(), p.getAreaUnit() != null ? p.getAreaUnit() : "Marla"));
-                        tvDetailBeds.setText(String.valueOf(p.getBedrooms()));
-                        tvDetailBaths.setText(String.valueOf(p.getBathrooms()));
+                        if (tvFeatureBedrooms != null) {
+                            tvFeatureBedrooms.setText(p.getBedrooms() + " bedrooms");
+                        }
+                        if (tvFeatureBathrooms != null) {
+                            tvFeatureBathrooms.setText(p.getBathrooms() + " bathrooms");
+                        }
+                        if (tvFeatureLiving != null) {
+                            tvFeatureLiving.setText("N/A living rooms");
+                        }
+                        if (tvFeatureKitchen != null) {
+                            tvFeatureKitchen.setText("Kitchen");
+                        }
 
                         if (p.isHasGarage()) {
                             ivFeatGarage.setVisibility(View.VISIBLE);
@@ -249,18 +288,6 @@ public class PropertyPreviewFragment extends Fragment {
                             tvFeatGarden.setVisibility(View.VISIBLE);
                         }
 
-                        String desc = p.getDescription();
-                        if (desc != null && !desc.isEmpty()) {
-                            tvDescription.setText(desc);
-
-                            tvDescription.post(() -> {
-                                if (tvDescription.getLineCount() > 3) {
-                                    tvReadMore.setVisibility(View.VISIBLE);
-                                }
-                            });
-                        } else {
-                            tvDescription.setText("No description provided.");
-                        }
 
                         allImagePaths.clear();
                         if (p.getImagePaths() != null && !p.getImagePaths().isEmpty()) {
@@ -270,6 +297,7 @@ public class PropertyPreviewFragment extends Fragment {
                         }
 
                         setupImagePager();
+                        bindCompactImage();
                     }
 
                     @Override
@@ -303,7 +331,7 @@ public class PropertyPreviewFragment extends Fragment {
                 public int getItemCount() { return 1; }
             });
 
-            tvPageIndicator.setText("1 / 1");
+            renderDots(1);
             return;
         }
 
@@ -349,14 +377,47 @@ public class PropertyPreviewFragment extends Fragment {
             public int getItemCount() { return allImagePaths.size(); }
         });
 
-        tvPageIndicator.setText("1 / " + allImagePaths.size());
+        renderDots(allImagePaths.size());
 
         vpImages.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                tvPageIndicator.setText((position + 1) + " / " + allImagePaths.size());
+                setActiveDot(position);
             }
         });
+    }
+
+    private void bindCompactImage() {
+        if (ivCompactImage == null) return;
+        if (allImagePaths.isEmpty()) {
+            Glide.with(requireContext())
+                    .load(R.drawable.default_house)
+                    .centerCrop()
+                    .into(ivCompactImage);
+            return;
+        }
+        String path = allImagePaths.get(0);
+        if (path == null || path.trim().isEmpty() || "null".equalsIgnoreCase(path.trim())) {
+            Glide.with(requireContext())
+                    .load(R.drawable.default_house)
+                    .centerCrop()
+                    .into(ivCompactImage);
+            return;
+        }
+        File f = new File(path);
+        if (f.exists()) {
+            Glide.with(requireContext())
+                    .load(f)
+                    .centerCrop()
+                    .error(R.drawable.default_house)
+                    .into(ivCompactImage);
+        } else {
+            Glide.with(requireContext())
+                    .load(path)
+                    .centerCrop()
+                    .error(R.drawable.default_house)
+                    .into(ivCompactImage);
+        }
     }
 
     static class ImageVH extends RecyclerView.ViewHolder {
@@ -402,5 +463,38 @@ public class PropertyPreviewFragment extends Fragment {
         b.putString("propertyId", propertyId);
         f.setArguments(b);
         return f;
+    }
+
+    private void renderDots(int count) {
+        if (dotIndicator == null) return;
+        dotIndicator.removeAllViews();
+        int size = dpToPx(6);
+        int margin = dpToPx(6);
+        for (int i = 0; i < Math.max(count, 1); i++) {
+            View dot = new View(requireContext());
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(size, size);
+            if (i > 0) lp.setMarginStart(margin);
+            dot.setLayoutParams(lp);
+            dot.setBackgroundResource(i == 0 ? R.drawable.bg_dot_active : R.drawable.bg_dot_inactive);
+            dotIndicator.addView(dot);
+        }
+    }
+
+    private void setActiveDot(int index) {
+        if (dotIndicator == null) return;
+        for (int i = 0; i < dotIndicator.getChildCount(); i++) {
+            View dot = dotIndicator.getChildAt(i);
+            dot.setBackgroundResource(i == index ? R.drawable.bg_dot_active : R.drawable.bg_dot_inactive);
+        }
+    }
+
+    private int dpToPx(int dp) {
+        float density = getResources().getDisplayMetrics().density;
+        return Math.round(dp * density);
+    }
+
+    private void updateSheetHeader(boolean expanded) {
+        if (compactCard != null) compactCard.setVisibility(expanded ? View.VISIBLE : View.GONE);
+        if (collapsedHeader != null) collapsedHeader.setVisibility(expanded ? View.GONE : View.VISIBLE);
     }
 }

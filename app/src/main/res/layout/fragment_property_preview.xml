@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/preview_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/ps_background"
-    android:orientation="vertical">
+    android:background="@color/ps_background">
 
     <!-- Hero image area with ViewPager2 -->
     <FrameLayout
+        android:id="@+id/hero_container"
         android:layout_width="match_parent"
-        android:layout_height="280dp">
+        android:layout_height="340dp">
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/vp_images"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="492dp"
             android:background="#E9ECEF" />
 
         <!-- Top bar -->
@@ -65,133 +65,207 @@
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_page_indicator"
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="22dp"
             android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginBottom="12dp"
-            android:background="@drawable/splash_progress_pill"
-            android:paddingStart="12dp"
-            android:paddingTop="4dp"
-            android:paddingEnd="12dp"
-            android:paddingBottom="4dp"
-            android:text="1 / 1"
-            android:textColor="@color/white"
-            android:textSize="11sp" />
+            android:layout_marginBottom="2dp"
+            app:cardBackgroundColor="#CCFFFFFF"
+            app:cardCornerRadius="11dp"
+            app:cardElevation="0dp">
+
+            <LinearLayout
+                android:id="@+id/dot_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp" />
+
+        </com.google.android.material.card.MaterialCardView>
     </FrameLayout>
 
-    <!-- Scrollable content -->
-    <androidx.core.widget.NestedScrollView
+    <!-- Draggable details sheet -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/bottom_sheet"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:fillViewport="true"
-        android:overScrollMode="never">
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        app:cardBackgroundColor="@color/ps_surface"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="0dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingStart="20dp"
-            android:paddingTop="16dp"
-            android:paddingEnd="20dp"
-            android:paddingBottom="12dp">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <!-- Title + price -->
-            <LinearLayout
+            <View
+                android:id="@+id/drag_handle"
+                android:layout_width="38dp"
+                android:layout_height="4dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="6dp"
+                android:background="@drawable/bg_drag_handle" />
+
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:fillViewport="true"
+                android:overScrollMode="never">
+
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-                    <TextView android:id="@+id/tv_title" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:textColor="@color/ps_text_primary" android:textSize="18sp" android:textStyle="bold" />
-                    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp" android:gravity="center_vertical" android:orientation="horizontal">
-                        <ImageView android:layout_width="14dp" android:layout_height="14dp" android:contentDescription="Location"
-                            android:src="@drawable/ic_pin_placeholder" />
-                        <TextView android:id="@+id/tv_address" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:layout_marginStart="6dp" android:textColor="@color/ps_text_secondary" android:textSize="12sp" />
-                    </LinearLayout>
-                </LinearLayout>
-                <TextView android:id="@+id/tv_price" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:textColor="@color/ps_primary_dark" android:textSize="18sp" android:textStyle="bold" />
-            </LinearLayout>
+                    android:orientation="vertical"
+                    android:paddingStart="20dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="20dp"
+                    android:paddingBottom="12dp">
 
-            <!-- Details card -->
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp"
-                android:text="Details" android:textColor="@color/ps_text_primary" android:textSize="13sp" android:textStyle="bold" />
+                    <LinearLayout
+                        android:id="@+id/collapsed_header"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp"
-                app:cardBackgroundColor="@color/ps_surface" app:cardCornerRadius="16dp" app:cardElevation="0dp"
-                app:strokeColor="@color/ps_divider" app:strokeWidth="1dp">
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:orientation="vertical" android:padding="14dp">
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="wrap_content"
+                            android:layout_height="22dp"
+                            app:cardBackgroundColor="#EEF2F6"
+                            app:cardCornerRadius="11dp"
+                            app:cardElevation="0dp">
 
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-                            android:text="Type" android:textColor="@color/ps_text_secondary" android:textSize="12sp" />
-                        <TextView android:id="@+id/tv_detail_type" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:textColor="@color/ps_text_primary" android:textSize="12sp" />
-                    </LinearLayout>
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginTop="10dp" android:layout_marginBottom="10dp" android:background="@color/ps_divider" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="10dp"
+                                android:text="Featured"
+                                android:textColor="#4A677E"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
 
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-                            android:text="Year Built" android:textColor="@color/ps_text_secondary" android:textSize="12sp" />
-                        <TextView android:id="@+id/tv_detail_year" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:textColor="@color/ps_text_primary" android:textSize="12sp" />
-                    </LinearLayout>
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginTop="10dp" android:layout_marginBottom="10dp" android:background="@color/ps_divider" />
+                        </com.google.android.material.card.MaterialCardView>
 
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-                            android:text="Living Area" android:textColor="@color/ps_text_secondary" android:textSize="12sp" />
-                        <TextView android:id="@+id/tv_detail_area" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:textColor="@color/ps_text_primary" android:textSize="12sp" />
-                    </LinearLayout>
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginTop="10dp" android:layout_marginBottom="10dp" android:background="@color/ps_divider" />
-
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-                            android:text="Bedrooms" android:textColor="@color/ps_text_secondary" android:textSize="12sp" />
-                        <TextView android:id="@+id/tv_detail_beds" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:textColor="@color/ps_text_primary" android:textSize="12sp" />
-                    </LinearLayout>
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginTop="10dp" android:layout_marginBottom="10dp" android:background="@color/ps_divider" />
-
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-                            android:text="Bathrooms" android:textColor="@color/ps_text_secondary" android:textSize="12sp" />
-                        <TextView android:id="@+id/tv_detail_baths" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:textColor="@color/ps_text_primary" android:textSize="12sp" />
+                        <!-- Title + price (collapsed only) -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+                                <TextView android:id="@+id/tv_title" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                    android:textColor="@color/ps_text_primary" android:textSize="18sp" android:textStyle="bold" />
+                                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                    android:layout_marginTop="6dp" android:gravity="center_vertical" android:orientation="horizontal">
+                                    <ImageView android:layout_width="14dp" android:layout_height="14dp" android:contentDescription="Location"
+                                        android:src="@drawable/ic_pin_placeholder" />
+                                    <TextView android:id="@+id/tv_address" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                        android:layout_marginStart="6dp" android:textColor="@color/ps_text_secondary" android:textSize="12sp" />
+                                </LinearLayout>
+                            </LinearLayout>
+                            <TextView android:id="@+id/tv_price" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:textColor="@color/ps_primary_dark" android:textSize="18sp" android:textStyle="bold" />
+                        </LinearLayout>
                     </LinearLayout>
 
-                    <LinearLayout android:id="@+id/features_row" android:layout_width="match_parent" android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp" android:gravity="center_vertical" android:orientation="horizontal">
-                        <ImageView android:id="@+id/iv_feat_garage" android:layout_width="18dp" android:layout_height="18dp"
-                            android:src="@drawable/ic_garage_placeholder" android:visibility="gone" android:contentDescription="Garage" />
-                        <TextView android:id="@+id/tv_feat_garage" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp" android:text="Garage" android:textColor="@color/ps_text_secondary"
-                            android:textSize="11sp" android:visibility="gone" />
-                        <ImageView android:id="@+id/iv_feat_garden" android:layout_width="18dp" android:layout_height="18dp"
-                            android:layout_marginStart="16dp" android:src="@drawable/ic_garden_placeholder" android:visibility="gone" android:contentDescription="Garden" />
-                        <TextView android:id="@+id/tv_feat_garden" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp" android:text="Garden" android:textColor="@color/ps_text_secondary"
-                            android:textSize="11sp" android:visibility="gone" />
-                    </LinearLayout>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/compact_card"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        app:cardBackgroundColor="@color/ps_surface"
+                        app:cardCornerRadius="14dp"
+                        app:cardElevation="0dp"
+                        app:strokeColor="@color/ps_divider"
+                        app:strokeWidth="1dp">
 
-            <!-- Owner -->
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp"
-                android:text="Owner" android:textColor="@color/ps_text_primary" android:textSize="13sp" android:textStyle="bold" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:padding="10dp">
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="46dp"
+                                android:layout_height="46dp"
+                                app:cardBackgroundColor="#E9ECEF"
+                                app:cardCornerRadius="12dp"
+                                app:cardElevation="0dp">
+
+                                <ImageView
+                                    android:id="@+id/iv_compact_image"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:contentDescription="Property"
+                                    android:scaleType="centerCrop" />
+
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tv_compact_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/ps_text_primary"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold" />
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <ImageView
+                                        android:layout_width="12dp"
+                                        android:layout_height="12dp"
+                                        android:contentDescription="Location"
+                                        android:src="@drawable/ic_pin_placeholder" />
+
+                                    <TextView
+                                        android:id="@+id/tv_compact_address"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="6dp"
+                                        android:textColor="@color/ps_text_secondary"
+                                        android:textSize="11sp" />
+
+                                </LinearLayout>
+                            </LinearLayout>
+
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Owner"
+                        android:textColor="@color/ps_text_primary"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp"
@@ -222,15 +296,155 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Description -->
+            <!-- Details card -->
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp"
-                android:text="Description" android:textColor="@color/ps_text_primary" android:textSize="13sp" android:textStyle="bold" />
-            <TextView android:id="@+id/tv_description" android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:layout_marginTop="6dp" android:ellipsize="end" android:lineSpacingExtra="2dp" android:maxLines="3"
-                android:textColor="#9AA3AB" android:textSize="12sp" />
-            <TextView android:id="@+id/tv_read_more" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:layout_marginTop="4dp" android:text="Read more" android:textColor="@color/ps_primary_dark"
-                android:textSize="12sp" android:textStyle="bold" android:visibility="gone" />
+                android:text="Details" android:textColor="@color/ps_text_primary" android:textSize="14sp" android:textStyle="bold" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp"
+                app:cardBackgroundColor="@color/ps_surface" app:cardCornerRadius="16dp" app:cardElevation="0dp"
+                app:strokeColor="@color/ps_divider" app:strokeWidth="1dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:padding="14dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="BUILDING"
+                        android:textAllCaps="true"
+                        android:textColor="@color/ps_text_secondary"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="10dp" android:orientation="horizontal">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                            android:text="Type" android:textColor="@color/ps_text_secondary" android:textSize="13sp" />
+                        <TextView android:id="@+id/tv_detail_type" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:textColor="@color/ps_text_primary" android:textSize="13sp" />
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginTop="10dp" android:layout_marginBottom="10dp" android:background="@color/ps_divider" />
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                            android:text="Year built" android:textColor="@color/ps_text_secondary" android:textSize="13sp" />
+                        <TextView android:id="@+id/tv_detail_year" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:textColor="@color/ps_text_primary" android:textSize="13sp" />
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginTop="10dp" android:layout_marginBottom="10dp" android:background="@color/ps_divider" />
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                            android:text="Living area" android:textColor="@color/ps_text_secondary" android:textSize="13sp" />
+                        <TextView android:id="@+id/tv_detail_area" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:textColor="@color/ps_text_primary" android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:text="FEATURES"
+                        android:textAllCaps="true"
+                        android:textColor="@color/ps_text_secondary"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+                            <ImageView android:layout_width="16dp" android:layout_height="16dp"
+                                android:contentDescription="Bedrooms" android:src="@drawable/ic_bedroom_placeholder" />
+                            <TextView android:id="@+id/tv_feature_bedrooms" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp" android:textColor="@color/ps_text_secondary" android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+                            <ImageView android:layout_width="16dp" android:layout_height="16dp"
+                                android:contentDescription="Living rooms" android:src="@drawable/ic_living_placeholder" />
+                            <TextView android:id="@+id/tv_feature_living" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp" android:text="N/A" android:textColor="@color/ps_text_secondary" android:textSize="12sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+                            <ImageView android:layout_width="16dp" android:layout_height="16dp"
+                                android:contentDescription="Bathrooms" android:src="@drawable/ic_bathroom_placeholder" />
+                            <TextView android:id="@+id/tv_feature_bathrooms" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp" android:textColor="@color/ps_text_secondary" android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+                            <ImageView android:layout_width="16dp" android:layout_height="16dp"
+                                android:contentDescription="Kitchen" android:src="@drawable/ic_kitchen_placeholder" />
+                            <TextView android:id="@+id/tv_feature_kitchen" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp" android:text="N/A" android:textColor="@color/ps_text_secondary" android:textSize="12sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+                            <ImageView android:id="@+id/iv_feat_garage" android:layout_width="16dp" android:layout_height="16dp"
+                                android:contentDescription="Garage" android:src="@drawable/ic_garage_placeholder" android:visibility="gone" />
+                            <TextView android:id="@+id/tv_feat_garage" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp" android:text="Garage" android:textColor="@color/ps_text_secondary"
+                                android:textSize="12sp" android:visibility="gone" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+                            <ImageView android:id="@+id/iv_feat_garden" android:layout_width="16dp" android:layout_height="16dp"
+                                android:contentDescription="Garden" android:src="@drawable/ic_garden_placeholder" android:visibility="gone" />
+                            <TextView android:id="@+id/tv_feat_garden" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp" android:text="Garden" android:textColor="@color/ps_text_secondary"
+                                android:textSize="12sp" android:visibility="gone" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- View on Map -->
             <com.google.android.material.card.MaterialCardView
@@ -269,28 +483,31 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+
+            <!-- Bottom CTAs -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal"
+                android:paddingStart="20dp" android:paddingEnd="20dp" android:paddingTop="8dp" android:paddingBottom="16dp">
+                <com.google.android.material.card.MaterialCardView android:id="@+id/btn_chat" android:layout_width="0dp"
+                    android:layout_height="52dp" android:layout_weight="1" app:cardBackgroundColor="@color/ps_surface"
+                    app:cardCornerRadius="26dp" app:cardElevation="0dp" app:strokeColor="@color/ps_primary_dark" app:strokeWidth="1dp">
+                    <TextView android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center"
+                        android:text="CHAT" android:textAllCaps="true" android:textColor="@color/ps_primary_dark"
+                        android:textSize="12sp" android:textStyle="bold" />
+                </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.card.MaterialCardView android:id="@+id/btn_call" android:layout_width="0dp"
+                    android:layout_height="52dp" android:layout_marginStart="14dp" android:layout_weight="1"
+                    app:cardBackgroundColor="@color/ps_primary_dark" app:cardCornerRadius="26dp" app:cardElevation="0dp">
+                    <TextView android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center"
+                        android:text="CALL" android:textAllCaps="true" android:textColor="@color/white"
+                        android:textSize="12sp" android:textStyle="bold" />
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
 
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
 
-    <!-- Bottom CTAs -->
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal"
-        android:paddingStart="20dp" android:paddingEnd="20dp" android:paddingTop="8dp" android:paddingBottom="16dp"
-        android:background="@color/ps_surface">
-        <com.google.android.material.card.MaterialCardView android:id="@+id/btn_chat" android:layout_width="0dp"
-            android:layout_height="52dp" android:layout_weight="1" app:cardBackgroundColor="@color/ps_surface"
-            app:cardCornerRadius="26dp" app:cardElevation="0dp" app:strokeColor="@color/ps_primary_dark" app:strokeWidth="1dp">
-            <TextView android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center"
-                android:text="SMS" android:textAllCaps="true" android:textColor="@color/ps_primary_dark"
-                android:textSize="12sp" android:textStyle="bold" />
-        </com.google.android.material.card.MaterialCardView>
-        <com.google.android.material.card.MaterialCardView android:id="@+id/btn_call" android:layout_width="0dp"
-            android:layout_height="52dp" android:layout_marginStart="14dp" android:layout_weight="1"
-            app:cardBackgroundColor="@color/ps_primary_dark" app:cardCornerRadius="26dp" app:cardElevation="0dp">
-            <TextView android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center"
-                android:text="CALL" android:textAllCaps="true" android:textColor="@color/white"
-                android:textSize="12sp" android:textStyle="bold" />
-        </com.google.android.material.card.MaterialCardView>
-    </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+

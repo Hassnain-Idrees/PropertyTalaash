@@ -33,7 +33,7 @@
         android:layout_width="320dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/ps_background"
+        android:background="@color/ps_primary_dark"
         android:orientation="vertical"
         android:padding="16dp">
 
@@ -46,9 +46,11 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginTop="16dp"
-            app:cardBackgroundColor="@color/ps_primary_dark"
+            app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="14dp"
-            app:cardElevation="0dp">
+            app:cardElevation="0dp"
+            app:strokeColor="@color/ps_primary_dark"
+            app:strokeWidth="1dp">
 
             <TextView
                 android:id="@+id/tv_add_property"
@@ -56,7 +58,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="+ Add Property"
-                android:textColor="@color/white"
+                android:textColor="@color/ps_primary_dark"
                 android:textSize="14sp"
                 android:textStyle="bold" />
         </com.google.android.material.card.MaterialCardView>
@@ -65,7 +67,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="16dp"
-            android:background="@color/ps_divider" />
+            android:background="#33FFFFFF" />
 
         <!-- Scrollable menu items -->
         <ScrollView
@@ -84,7 +86,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Browse"
-                    android:textColor="@color/ps_text_secondary"
+                    android:textColor="#B3FFFFFF"
                     android:textSize="12sp"
                     android:textStyle="bold" />
 
@@ -103,14 +105,15 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:contentDescription="Home"
-                        android:src="@drawable/ic_nav_home_placeholder" />
+                        android:src="@drawable/ic_nav_home_placeholder"
+                        android:tint="@color/white" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:text="Home"
-                        android:textColor="@color/ps_text_primary"
+                        android:textColor="@color/white"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -129,14 +132,15 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:contentDescription="Search Properties"
-                        android:src="@drawable/ic_search_placeholder" />
+                        android:src="@drawable/ic_search_placeholder"
+                        android:tint="@color/white" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:text="Search Properties"
-                        android:textColor="@color/ps_text_primary"
+                        android:textColor="@color/white"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -154,14 +158,15 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:contentDescription="Favorites"
-                        android:src="@drawable/ic_nav_heart_placeholder" />
+                        android:src="@drawable/ic_nav_heart_placeholder"
+                        android:tint="@color/white" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:text="Favorites"
-                        android:textColor="@color/ps_text_primary"
+                        android:textColor="@color/white"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -179,14 +184,15 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:contentDescription="Saved Searches"
-                        android:src="@drawable/ic_notification_placeholder" />
+                        android:src="@drawable/ic_notification_placeholder"
+                        android:tint="@color/white" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:text="Saved Searches"
-                        android:textColor="@color/ps_text_primary"
+                        android:textColor="@color/white"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -195,7 +201,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
                     android:text="Support"
-                    android:textColor="@color/ps_text_secondary"
+                    android:textColor="#B3FFFFFF"
                     android:textSize="12sp"
                     android:textStyle="bold" />
 
@@ -213,14 +219,15 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:contentDescription="About Us"
-                        android:src="@drawable/ic_nav_profile_placeholder" />
+                        android:src="@drawable/ic_nav_profile_placeholder"
+                        android:tint="@color/white" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:text="About Us"
-                        android:textColor="@color/ps_text_primary"
+                        android:textColor="@color/white"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -238,14 +245,15 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:contentDescription="Contact Us"
-                        android:src="@drawable/ic_nav_chat_placeholder" />
+                        android:src="@drawable/ic_nav_chat_placeholder"
+                        android:tint="@color/white" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:text="Contact Us"
-                        android:textColor="@color/ps_text_primary"
+                        android:textColor="@color/white"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -265,14 +273,15 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:contentDescription="Terms and Privacy Policy"
-                        android:src="@drawable/ic_menu_placeholder" />
+                        android:src="@drawable/ic_menu_placeholder"
+                        android:tint="@color/white" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:text="Terms and Privacy Policy"
-                        android:textColor="@color/ps_text_primary"
+                        android:textColor="@color/white"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -283,7 +292,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/ps_divider" />
+            android:background="#33FFFFFF" />
 
         <!-- Logout -->
         <TextView

@@ -49,7 +49,8 @@ public class HomePropertyAdapter extends RecyclerView.Adapter<HomePropertyAdapte
         h.tvPrice.setText(item.getPrice());
 
         String imageUrl = item.getImageUrl();
-        if (imageUrl != null && !imageUrl.isEmpty()) {
+        boolean hasImage = imageUrl != null && !imageUrl.trim().isEmpty() && !"null".equalsIgnoreCase(imageUrl.trim());
+        if (hasImage) {
             File imageFile = new File(imageUrl);
             if (imageFile.exists()) {
                 Glide.with(h.itemView.getContext())

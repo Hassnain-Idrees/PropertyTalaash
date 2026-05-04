@@ -30,7 +30,16 @@
             android:layout_height="48dp"
             app:cardBackgroundColor="#E9ECEF"
             app:cardCornerRadius="24dp"
-            app:cardElevation="0dp" />
+            app:cardElevation="0dp">
+
+            <ImageView
+                android:id="@+id/iv_drawer_avatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="Profile"
+                android:scaleType="centerCrop" />
+
+        </com.google.android.material.card.MaterialCardView>
 
         <LinearLayout
             android:layout_width="0dp"

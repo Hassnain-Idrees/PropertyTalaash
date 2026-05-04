@@ -9,11 +9,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +26,8 @@ import androidx.core.app.ActivityCompat;
 import com.example.myapplication.model.Property;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.chip.Chip;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -49,11 +49,11 @@ public class AddPropertyActivity extends AppCompatActivity {
     private static final int LOCATION_PERMISSION_CODE = 200;
 
     private EditText etTitle, etDescription, etAddress, etPrice, etArea,
-            etBedrooms, etBathrooms, etPhone, etYearBuilt;
-    private Spinner spinnerType, spinnerCity, spinnerAreaUnit;
-    private CheckBox cbGarage, cbGarden;
-    private MaterialCardView btnGetLocation, btnSubmit;
-    private TextView tvLocationStatus, tvSubmitLabel;
+            etBedrooms, etBathrooms, etPhone;
+    private AutoCompleteTextView spinnerType, spinnerCity, spinnerAreaUnit;
+    private Chip cbGarage, cbGarden, cbPool;
+    private MaterialButton btnGetLocation, btnSubmit, btnPickMap;
+    private TextView tvLocationStatus;
     private LinearLayout imagesContainer;
     private View pickImageOverlay;
 
@@ -97,7 +97,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         init();
 
         if (editPropertyId != null) {
-            tvSubmitLabel.setText("SAVE CHANGES");
+            btnSubmit.setText("Save Changes");
             loadPropertyForEdit();
         }
     }
@@ -115,31 +115,35 @@ public class AddPropertyActivity extends AppCompatActivity {
         etBedrooms = findViewById(R.id.et_bedrooms);
         etBathrooms = findViewById(R.id.et_bathrooms);
         etPhone = findViewById(R.id.et_phone);
-        etYearBuilt = findViewById(R.id.et_year_built);
-        spinnerType = findViewById(R.id.spinner_type);
-        spinnerCity = findViewById(R.id.spinner_city);
-        spinnerAreaUnit = findViewById(R.id.spinner_area_unit);
+        
+        spinnerType = findViewById(R.id.spinner_type_new);
+        spinnerCity = findViewById(R.id.spinner_city_new);
+        spinnerAreaUnit = findViewById(R.id.spinner_area_unit_new);
+        
         cbGarage = findViewById(R.id.cb_garage);
         cbGarden = findViewById(R.id.cb_garden);
+        cbPool = findViewById(R.id.cb_pool);
+        
         btnGetLocation = findViewById(R.id.btn_get_location);
+        btnPickMap = findViewById(R.id.btn_pick_on_map);
         btnSubmit = findViewById(R.id.btn_submit);
         tvLocationStatus = findViewById(R.id.tv_location_status);
-        tvSubmitLabel = findViewById(R.id.tv_submit_label);
 
+        // Setup Dropdowns
         String[] types = {"House", "Apartment", "Villa", "Plot", "Commercial"};
-        spinnerType.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, types));
+        spinnerType.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, types));
 
         String[] cities = {"Lahore", "Karachi", "Islamabad", "Rawalpindi", "Faisalabad",
                 "Multan", "Peshawar", "Quetta", "Sialkot", "Gujranwala"};
-        spinnerCity.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, cities));
+        spinnerCity.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, cities));
 
         String[] areaUnits = {"Marla", "Kanal", "Sq Ft", "Sq Yard"};
-        spinnerAreaUnit.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, areaUnits));
+        spinnerAreaUnit.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, areaUnits));
 
         pickImageOverlay.setOnClickListener(v -> imagePickerLauncher.launch("image/*"));
 
         btnGetLocation.setOnClickListener(v -> fetchCurrentLocation());
-        findViewById(R.id.btn_pick_on_map).setOnClickListener(v -> {
+        btnPickMap.setOnClickListener(v -> {
             Intent intent = new Intent(this, MapPickerActivity.class);
             intent.putExtra("lat", currentLat);
             intent.putExtra("lng", currentLng);
@@ -155,12 +159,14 @@ public class AddPropertyActivity extends AppCompatActivity {
 
         for (int i = 0; i < selectedImageUris.size(); i++) {
             ImageView iv = new ImageView(this);
-            int size = (int) (80 * getResources().getDisplayMetrics().density);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(size, size);
-            lp.setMargins(0, 0, (int) (8 * getResources().getDisplayMetrics().density), 0);
+            int size = (int) (120 * getResources().getDisplayMetrics().density);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(size, (int) (160 * getResources().getDisplayMetrics().density));
+            lp.setMargins(0, 0, (int) (12 * getResources().getDisplayMetrics().density), 0);
             iv.setLayoutParams(lp);
             iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            // In a real app, use Glide here for better performance
             iv.setImageURI(selectedImageUris.get(i));
+            
             final int index = i;
             iv.setOnLongClickListener(v -> {
                 selectedImageUris.remove(index);
@@ -171,15 +177,12 @@ public class AddPropertyActivity extends AppCompatActivity {
         }
 
         if (!selectedImageUris.isEmpty()) {
-            TextView addMore = new TextView(this);
-            int size = (int) (80 * getResources().getDisplayMetrics().density);
+            MaterialButton addMore = new MaterialButton(this, null, com.google.android.material.R.attr.materialButtonOutlinedStyle);
+            int size = (int) (100 * getResources().getDisplayMetrics().density);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(size, size);
+            lp.gravity = android.view.Gravity.CENTER_VERTICAL;
             addMore.setLayoutParams(lp);
-            addMore.setGravity(android.view.Gravity.CENTER);
             addMore.setText("+");
-            addMore.setTextSize(24);
-            addMore.setTextColor(0xFF97A1AA);
-            addMore.setBackgroundColor(0xFFE9ECEF);
             addMore.setOnClickListener(v -> imagePickerLauncher.launch("image/*"));
             imagesContainer.addView(addMore);
         }
@@ -199,9 +202,10 @@ public class AddPropertyActivity extends AppCompatActivity {
                 etBedrooms.setText(String.valueOf(p.getBedrooms()));
                 etBathrooms.setText(String.valueOf(p.getBathrooms()));
                 etPhone.setText(p.getOwnerPhone());
-                if (p.getYearBuilt() > 0) etYearBuilt.setText(String.valueOf(p.getYearBuilt()));
+                
                 cbGarage.setChecked(p.isHasGarage());
                 cbGarden.setChecked(p.isHasGarden());
+                
                 currentLat = p.getLatitude();
                 currentLng = p.getLongitude();
 
@@ -219,34 +223,21 @@ public class AddPropertyActivity extends AppCompatActivity {
                     }
                 }
 
-                setSpinnerValue(spinnerType, p.getType());
-                setSpinnerValue(spinnerCity, p.getCity());
-                setSpinnerValue(spinnerAreaUnit, p.getAreaUnit());
+                spinnerType.setText(p.getType(), false);
+                spinnerCity.setText(p.getCity(), false);
+                spinnerAreaUnit.setText(p.getAreaUnit(), false);
 
                 if (p.getImagePaths() != null) {
                     for (String path : p.getImagePaths()) {
                         File f = new File(path);
                         if (f.exists()) selectedImageUris.add(Uri.fromFile(f));
                     }
-                } else if (p.getImageUrl() != null && !p.getImageUrl().isEmpty()) {
-                    File f = new File(p.getImageUrl());
-                    if (f.exists()) selectedImageUris.add(Uri.fromFile(f));
                 }
                 refreshImagePreviews();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) { }
         });
-    }
-
-    private void setSpinnerValue(Spinner spinner, String value) {
-        if (value == null) return;
-        for (int i = 0; i < spinner.getCount(); i++) {
-            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(value)) {
-                spinner.setSelection(i);
-                break;
-            }
-        }
     }
 
     private void fetchCurrentLocation() {
@@ -309,10 +300,8 @@ public class AddPropertyActivity extends AppCompatActivity {
     }
 
     private void submitProperty() {
-
         if (mAuth.getCurrentUser() == null) {
-            Toast.makeText(this, "You must be logged in to add a property.", Toast.LENGTH_SHORT).show();
-            finish();
+            Toast.makeText(this, "You must be logged in.", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -324,22 +313,19 @@ public class AddPropertyActivity extends AppCompatActivity {
         String bedroomsStr = etBedrooms.getText().toString().trim();
         String bathroomsStr = etBathrooms.getText().toString().trim();
         String phone = etPhone.getText().toString().trim();
-        String yearStr = etYearBuilt.getText().toString().trim();
-        String type = spinnerType.getSelectedItem().toString();
-        String city = spinnerCity.getSelectedItem().toString();
-        String areaUnit = spinnerAreaUnit.getSelectedItem().toString();
+        String type = spinnerType.getText().toString();
+        String city = spinnerCity.getText().toString();
+        String areaUnit = spinnerAreaUnit.getText().toString();
 
         if (title.isEmpty()) { etTitle.setError("Required"); return; }
         if (address.isEmpty()) { etAddress.setError("Required"); return; }
         if (priceStr.isEmpty()) { etPrice.setError("Required"); return; }
-        if (areaStr.isEmpty()) { etArea.setError("Required"); return; }
-        if (phone.isEmpty()) { etPhone.setError("Phone required"); return; }
+        if (phone.isEmpty()) { etPhone.setError("Required"); return; }
 
         double price = Double.parseDouble(priceStr);
-        double area = Double.parseDouble(areaStr);
+        double area = areaStr.isEmpty() ? 0 : Double.parseDouble(areaStr);
         int bedrooms = bedroomsStr.isEmpty() ? 0 : Integer.parseInt(bedroomsStr);
         int bathrooms = bathroomsStr.isEmpty() ? 0 : Integer.parseInt(bathroomsStr);
-        int yearBuilt = yearStr.isEmpty() ? 0 : Integer.parseInt(yearStr);
 
         String ownerId = mAuth.getCurrentUser().getUid();
         String propertyId = editPropertyId != null ? editPropertyId : propertiesRef.push().getKey();
@@ -351,10 +337,9 @@ public class AddPropertyActivity extends AppCompatActivity {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        String ownerName = "Unknown";
-                        if (snapshot.exists() && snapshot.child("name").getValue() != null) {
-                            ownerName = snapshot.child("name").getValue(String.class);
-                        }
+                        String ownerName = snapshot.child("name").getValue(String.class);
+                        if (ownerName == null) ownerName = "Anonymous";
+
                         Property property = new Property();
                         property.setPropertyId(propertyId);
                         property.setOwnerId(ownerId);
@@ -376,18 +361,14 @@ public class AddPropertyActivity extends AppCompatActivity {
                         property.setLongitude(currentLng);
                         property.setImageUrl(firstImage);
                         property.setImagePaths(localImagePaths);
-                        property.setYearBuilt(yearBuilt);
                         property.setTimestamp(System.currentTimeMillis());
 
                         propertiesRef.child(propertyId).setValue(property)
                                 .addOnSuccessListener(unused -> {
-                                    Toast.makeText(AddPropertyActivity.this,
-                                            editPropertyId != null ? "Property Updated!" : "Property Added!",
-                                            Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(AddPropertyActivity.this, "Property Saved!", Toast.LENGTH_SHORT).show();
                                     finish();
                                 })
-                                .addOnFailureListener(e ->
-                                        Toast.makeText(AddPropertyActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                                .addOnFailureListener(e -> Toast.makeText(AddPropertyActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) { }
@@ -403,4 +384,3 @@ public class AddPropertyActivity extends AppCompatActivity {
         }
     }
 }
-

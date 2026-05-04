@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.example.myapplication.fragments.FavoritesFragment;
 import com.example.myapplication.fragments.HomeFragment;
 import com.example.myapplication.fragments.SearchResultsFragment;
@@ -54,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         TextView tvName = findViewById(R.id.tv_drawer_name);
         TextView tvContact = findViewById(R.id.tv_drawer_contact);
+        ImageView ivAvatar = findViewById(R.id.iv_drawer_avatar);
 
         if (tvContact != null) tvContact.setText(user.getEmail());
 
@@ -66,6 +69,30 @@ public class MainActivity extends AppCompatActivity {
                             String name = snapshot.child("name").getValue(String.class);
                             if (tvName != null && name != null) {
                                 tvName.setText(name);
+                            }
+                            if (ivAvatar != null) {
+                                String picPath = snapshot.child("profilePic").getValue(String.class);
+                                if (picPath != null && !picPath.isEmpty()) {
+                                    java.io.File f = new java.io.File(picPath);
+                                    if (f.exists()) {
+                                        Glide.with(MainActivity.this)
+                                                .load(f)
+                                                .circleCrop()
+                                                .error(R.drawable.default_profile)
+                                                .into(ivAvatar);
+                                    } else {
+                                        Glide.with(MainActivity.this)
+                                                .load(picPath)
+                                                .circleCrop()
+                                                .error(R.drawable.default_profile)
+                                                .into(ivAvatar);
+                                    }
+                                } else {
+                                    Glide.with(MainActivity.this)
+                                            .load(R.drawable.default_profile)
+                                            .circleCrop()
+                                            .into(ivAvatar);
+                                }
                             }
                         }
                     }

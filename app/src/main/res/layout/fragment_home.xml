@@ -338,6 +338,7 @@
 
             <!-- Show All / Nearby toggle -->
             <LinearLayout
+                android:id="@+id/nearby_row"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -454,12 +455,13 @@
         android:id="@+id/bottom_nav"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:background="@color/ps_surface"
+        android:background="@color/ps_primary_dark"
         android:paddingTop="0dp"
         android:paddingBottom="0dp"
+        app:itemBackground="@drawable/bg_bottom_nav_item"
         app:itemIconSize="24dp"
-        app:itemIconTint="@color/ps_icon_muted"
-        app:itemTextColor="@color/ps_icon_muted"
+        app:itemIconTint="@color/bottom_nav_item_tint"
+        app:itemTextColor="@color/bottom_nav_item_tint"
         app:itemRippleColor="@android:color/transparent"
         app:labelVisibilityMode="unlabeled"
         app:menu="@menu/menu_bottom_home" />

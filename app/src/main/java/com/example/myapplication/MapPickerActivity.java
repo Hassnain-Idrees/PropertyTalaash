@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,7 +22,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.List;
@@ -40,10 +40,15 @@ public class MapPickerActivity extends AppCompatActivity implements OnMapReadyCa
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // Use full screen / transparent status bar for modern look
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        
         setContentView(R.layout.activity_map_picker);
 
         tvSelectedAddress = findViewById(R.id.tv_selected_address);
         fusedClient = LocationServices.getFusedLocationProviderClient(this);
+        
         findViewById(R.id.iv_back).setOnClickListener(v -> finish());
 
         selectedLat = getIntent().getDoubleExtra("lat", 33.6844);
@@ -69,28 +74,31 @@ public class MapPickerActivity extends AppCompatActivity implements OnMapReadyCa
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        // Clean up UI for a more modern experience
+        mMap.getUiSettings().setCompassEnabled(false);
+        mMap.getUiSettings().setMapToolbarEnabled(false);
+        mMap.getUiSettings().setMyLocationButtonEnabled(false);
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
-            mMap.getUiSettings().setMyLocationButtonEnabled(false);
         }
 
         LatLng initial = new LatLng(selectedLat, selectedLng);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(initial, 16f));
 
+        // Modern UX: Address updates as the user drags the map
+        mMap.setOnCameraIdleListener(() -> {
+            LatLng center = mMap.getCameraPosition().target;
+            selectedLat = center.latitude;
+            selectedLng = center.longitude;
+            reverseGeocode(selectedLat, selectedLng);
+        });
+        
+        // Move to current location if it's the default
         if (selectedLat == 33.6844 && selectedLng == 73.0479) {
             goToMyLocation();
         }
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(initial, 14f));
-        mMap.addMarker(new MarkerOptions().position(initial).title("Selected"));
-
-        mMap.setOnMapClickListener(latLng -> {
-            mMap.clear();
-            mMap.addMarker(new MarkerOptions().position(latLng).title("Selected"));
-            mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-            selectedLat = latLng.latitude;
-            selectedLng = latLng.longitude;
-            reverseGeocode(selectedLat, selectedLng);
-        });
     }
 
     private void goToMyLocation() {
@@ -100,39 +108,38 @@ public class MapPickerActivity extends AppCompatActivity implements OnMapReadyCa
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOC_PERM);
             return;
         }
-        tvSelectedAddress.setText("Getting your location...");
-        fusedClient.getCurrentLocation(
-                com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY, null
-        ).addOnSuccessListener(location -> {
+        
+        fusedClient.getLastLocation().addOnSuccessListener(location -> {
             if (location != null && mMap != null) {
                 LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
-                mMap.clear();
-                mMap.addMarker(new MarkerOptions().position(ll).title("My Location"));
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(ll, 16f));
-                selectedLat = ll.latitude;
-                selectedLng = ll.longitude;
-                reverseGeocode(selectedLat, selectedLng);
-            } else {
-                tvSelectedAddress.setText("Could not get location");
             }
         });
     }
 
     private void reverseGeocode(double lat, double lng) {
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        try {
-            List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
-            if (addresses != null && !addresses.isEmpty()) {
-                selectedAddress = addresses.get(0).getAddressLine(0);
-                tvSelectedAddress.setText(selectedAddress);
-            } else {
-                selectedAddress = "Lat: " + lat + ", Lng: " + lng;
-                tvSelectedAddress.setText(selectedAddress);
+        tvSelectedAddress.setText("Locating...");
+        new Thread(() -> {
+            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+            try {
+                List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
+                runOnUiThread(() -> {
+                    if (addresses != null && !addresses.isEmpty()) {
+                        selectedAddress = addresses.get(0).getAddressLine(0);
+                        // Clean up address (remove country/code for brevity if needed)
+                        tvSelectedAddress.setText(selectedAddress);
+                    } else {
+                        selectedAddress = String.format(Locale.US, "%.5f, %.5f", lat, lng);
+                        tvSelectedAddress.setText(selectedAddress);
+                    }
+                });
+            } catch (IOException e) {
+                runOnUiThread(() -> {
+                    selectedAddress = String.format(Locale.US, "%.5f, %.5f", lat, lng);
+                    tvSelectedAddress.setText(selectedAddress);
+                });
             }
-        } catch (IOException e) {
-            selectedAddress = "Lat: " + lat + ", Lng: " + lng;
-            tvSelectedAddress.setText(selectedAddress);
-        }
+        }).start();
     }
 
     @Override
